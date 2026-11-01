@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#07080b">
+  <meta
+    name="description"
+    content="BRO BAZA — боулинг, игровая арена, фуд-корт, лаунж и интеллектуальные квизы в Волжском."
+  >
+
+  <title>BRO BAZA — Пространство отдыха и боулинга</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Unbounded:wght@600;700;800;900&display=swap"
+    rel="stylesheet"
+  >
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            obsidian: "#07080b",
+            carbon: "#0e1017",
+            card: "#12141c",
+            "card-hover": "#171a24",
+            amber: {
+              400: "#f6b443",
+              500: "#e59e28"
+            }
+          },
+          fontFamily: {
+            sans: ["'Plus Jakarta Sans'", "sans-serif"],
+            display: ["'Unbounded'", "sans-serif"],
+            mono: ["'JetBrains Mono'", "monospace"]
+          },
+          boxShadow: {
+            tactile: "inset 0 1px 0 rgba(255,255,255,0.12), 0 1px 2px rgba(0,0,0,0.5), 0 8px 24px rgba(0,0,0,0.4)",
+            button: "inset 0 1px 0 rgba(255,255,255,0.2), 0 2px 4px rgba(0,0,0,0.4)"
+          }
+        }
+      }
+    };
+  </script>
+
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script defer src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    :root {
+      color-scheme: dark;
+    }
+
+    [x-cloak] {
+      display: none !important;
+    }
+
+    /* Hallmark Keyline Border */
+    .keyline {
+      border: 1px solid rgba(255, 255, 255, 0.07);
+    }
+
+    .keyline-hover {
+      transition: border-color 0.2s ease, background-color 0.2s ease;
+    }
+
+    .keyline-hover:hover {
+      border-color: rgba(255, 255, 255, 0.16);
+    }
+
+    .ticker-track {
+      animation: ticker 32s linear infinite;
+    }
+
+    @keyframes ticker {
+      to { transform: translateX(-50%); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .ticker-track { animation: none; }
+    }
+  </style>
+</head>
+
+<body class="min-h-screen bg-obsidian font-sans text-zinc-200 antialiased selection:bg-amber-400 selection:text-black">
+
+  <!-- Ambient Stage Light -->
+  <div class="pointer-events-none fixed inset-x-0 top-0 z-0 h-[480px] bg-[radial-gradient(ellipse_60%_280px_at_50%_-10%,rgba(246,180,67,0.08),transparent)]"></div>
+
+  <!-- Header -->
+  <header
+    x-data="{ open: false, scrolled: false }"
+    @scroll.window="scrolled = window.scrollY > 25"
+    class="fixed inset-x-0 top-0 z-50 transition-all duration-200"
+    :class="scrolled ? 'border-b border-white/[0.08] bg-obsidian/85 py-3.5 backdrop-blur-md' : 'bg-transparent py-5'"
+  >
+    <div class="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+      <a href="#hero" class="flex items-center gap-3" aria-label="BRO BAZA">
+        <div class="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 bg-carbon font-display text-sm font-black text-amber-400 shadow-tactile">
+          B
+        </div>
+        <div class="leading-none">
+          <div class="font-display text-sm font-extrabold tracking-tight text-white">BRO BAZA</div>
+          <div class="mt-1 font-mono text-[9px] uppercase tracking-wider text-zinc-500">Volzhsky // Est. 2024</div>
+        </div>
+      </a>
+
+      <nav class="hidden items-center gap-8 text-xs font-semibold uppercase tracking-wider text-zinc-400 lg:flex">
+        <a href="#zones" class="transition hover:text-white">Локации</a>
+        <a href="#bowling" class="transition hover:text-white">Боулинг</a>
+        <a href="#food" class="transition hover:text-white">Фуд-корт</a>
+        <a href="#game-zone" class="transition hover:text-white">Игровая</a>
+        <a href="#quizzes" class="transition hover:text-white">Квизы</a>
+        <a href="#contacts" class="transition hover:text-white">Контакты</a>
+      </nav>
+
+      <div class="flex items-center gap-3.5">
+        <a
+          href="tel:+79275215167"
+          class="hidden items-center gap-2 font-mono text-xs text-zinc-400 transition hover:text-white sm:flex"
+        >
+          <span class="inline-block h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+          8 (927) 521-51-67
+        </a>
+
+        <button
+          type="button"
+          class="hidden rounded-lg bg-zinc-100 px-4 py-2 font-display text-xs font-bold uppercase tracking-wider text-black shadow-button transition hover:bg-amber-400 active:scale-[0.98] sm:block"
+          @click="$dispatch('open-booking')"
+        >
+          Забронировать
+        </button>
+
+        <button
+          type="button"
+          class="grid h-9 w-9 place-items-center rounded-lg border border-white/10 bg-carbon lg:hidden"
+          @click="open = !open"
+          :aria-expanded="open"
+          aria-label="Меню"
+        >
+          <i :data-lucide="open ? 'x' : 'menu'" class="h-4 w-4"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Nav -->
+    <div
+      x-show="open"
+      x-cloak
+      x-transition
+      class="border-b border-white/10 bg-carbon px-6 py-6 lg:hidden"
+    >
+      <nav class="flex flex-col gap-3 font-mono text-xs uppercase tracking-wider text-zinc-300">
+        <a href="#zones" @click="open = false" class="py-1.5 hover:text-white">Локации</a>
+        <a href="#bowling" @click="open = false" class="py-1.5 hover:text-white">Боулинг</a>
+        <a href="#food" @click="open = false" class="py-1.5 hover:text-white">Фуд-корт</a>
+        <a href="#game-zone" @click="open = false" class="py-1.5 hover:text-white">Игровая зона</a>
+        <a href="#quizzes" @click="open = false" class="py-1.5 hover:text-white">Квизы</a>
+        <a href="#contacts" @click="open = false" class="py-1.5 hover:text-white">Контакты</a>
+        <button
+          type="button"
+          class="mt-2 w-full rounded-lg bg-white py-3 font-display text-xs font-bold uppercase tracking-wider text-black"
+          @click="open = false; $dispatch('open-booking')"
+        >
+          Забронировать
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="relative z-10">
+    <!-- Hero -->
+    <section id="hero" class="border-b border-white/[0.08] pt-32 pb-20 sm:pt-40 sm:pb-28">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="grid items-center gap-14 lg:grid-cols-[1.1fr_0.9fr]">
+          <div>
+            <div class="inline-flex items-center gap-2.5 rounded-md border border-white/10 bg-carbon/80 px-3 py-1.5 font-mono text-[11px] text-zinc-300 shadow-tactile">
+              <span class="h-1.5 w-1.5 rounded-full bg-emerald-400"></span>
+              STATUS: OPEN DAILY // 11:00 — 18:00
+            </div>
+
+            <h1 class="mt-6 font-display text-4xl font-black uppercase tracking-tight text-white sm:text-6xl sm:leading-[1.08]">
+              Собери свой вечер <span class="text-amber-400">в Волжском</span>
+            </h1>
+
+            <p class="mt-6 max-w-xl text-base leading-relaxed text-zinc-400 sm:text-lg">
+              Пространство отдыха полного цикла: турнирный боулинг, консоли PS4, бильярдная, авторский фуд-корт, лаунж-зал и квизы.
+            </p>
+
+            <div class="mt-8 flex flex-wrap items-center gap-3.5">
+              <button
+                type="button"
+                class="inline-flex items-center gap-2.5 rounded-lg bg-white px-6 py-3.5 font-display text-xs font-extrabold uppercase tracking-wider text-black shadow-button transition hover:bg-amber-400 active:scale-[0.98]"
+                @click="$dispatch('open-booking')"
+              >
+                Выбрать дорожку
+                <i data-lucide="arrow-up-right" class="h-4 w-4"></i>
+              </button>
+
+              <a
+                href="#zones"
+                class="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-carbon px-6 py-3.5 font-display text-xs font-bold uppercase tracking-wider text-zinc-300 shadow-tactile transition hover:border-white/20 hover:text-white"
+              >
+                Карта заведений
+              </a>
+            </div>
+
+            <!-- Key Figures -->
+            <div class="mt-14 grid grid-cols-3 gap-4 border-t border-white/[0.08] pt-8 font-mono">
+              <div>
+                <div class="font-display text-2xl font-black text-white sm:text-3xl">07</div>
+                <div class="mt-1 text-[11px] uppercase tracking-wider text-zinc-500">Дорожек</div>
+              </div>
+              <div>
+                <div class="font-display text-2xl font-black text-white sm:text-3xl">700+</div>
+                <div class="mt-1 text-[11px] uppercase tracking-wider text-zinc-500">Игр на PS4</div>
+              </div>
+              <div>
+                <div class="font-display text-2xl font-black text-amber-400 sm:text-3xl">0 ₽</div>
+                <div class="mt-1 text-[11px] uppercase tracking-wider text-zinc-500">Вход по чеку</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="relative">
+            <div class="overflow-hidden rounded-2xl border border-white/10 bg-carbon shadow-tactile">
+              <div class="flex items-center justify-between border-b border-white/[0.08] bg-obsidian/60 px-4 py-2.5 font-mono text-[11px] text-zinc-400">
+                <span>[SPACE SPECIFICATION]</span>
+                <span class="text-amber-400">FREE ZONE ACCESS</span>
+              </div>
+              <img
+                src="https://images.unsplash.com/photo-1579917999888-932faa75191b?auto=format&fit=crop&w=1200&q=80"
+                alt="Пространство BRO BAZA"
+                class="h-[380px] w-full object-cover sm:h-[440px]"
+              >
+              <div class="p-5">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <div class="font-display text-sm font-bold text-white uppercase">Игровая арена</div>
+                    <div class="mt-0.5 text-xs text-zinc-400">PlayStation 4 Pro · Бильярд · Аэрохоккей</div>
+                  </div>
+                  <span class="font-mono text-xs text-emerald-400">Безлимит по чеку</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Ticker Strip -->
+    <div class="overflow-hidden border-b border-white/[0.08] bg-carbon/50 py-3 font-mono text-xs uppercase tracking-widest text-zinc-500" aria-hidden="true">
+      <div class="ticker-track flex w-max items-center">
+        <template x-for="pass in 2" :key="pass">
+          <div class="flex shrink-0 items-center gap-8 pr-8">
+            <span class="text-zinc-300">01. Боулинг (7 дорожек)</span><span>//</span>
+            <span class="text-zinc-300">02. Free Gaming Zone</span><span>//</span>
+            <span class="text-zinc-300">03. Фирменный фуд-корт</span><span>//</span>
+            <span class="text-zinc-300">04. Hookah Lounge 18+</span><span>//</span>
+            <span class="text-zinc-300">05. Квиз-турниры</span><span>//</span>
+          </div>
+        </template>
+      </div>
+    </div>
+
+    <!-- Zones Grid -->
+    <section id="zones" class="py-20 sm:py-28">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col justify-between gap-4 md:flex-row md:items-end">
+          <div>
+            <span class="font-mono text-xs font-semibold uppercase tracking-wider text-amber-400">[01 // ФОРМАТЫ]</span>
+            <h2 class="mt-2 font-display text-2xl font-black uppercase tracking-tight text-white sm:text-4xl">
+              Локации комплекса
+            </h2>
+          </div>
+          <p class="max-w-md text-sm text-zinc-400">
+            Каждая зона дополняет вечер. Вы можете совместить турнир по боулингу с ужином и настольными играми.
+          </p>
+        </div>
+
+        <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <article class="keyline keyline-hover group rounded-2xl bg-card p-2 shadow-tactile">
+            <div class="relative overflow-hidden rounded-xl">
+              <span class="absolute left-3 top-3 z-10 rounded bg-obsidian/80 px-2 py-0.5 font-mono text-[10px] text-zinc-300 backdrop-blur">
+                ZONE // 01
+              </span>
+              <img
+                src="https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=800&q=80"
+                alt="Боулинг"
+                class="h-52 w-full object-cover transition duration-300 group-hover:scale-105"
+              >
+            </div>
+            <div class="p-4">
+              <div class="flex items-center justify-between">
+                <h3 class="font-display text-base font-bold uppercase text-white">Боулинг</h3>
+                <span class="font-mono text-xs text-amber-400">от 750 ₽/ч</span>
+              </div>
+              <p class="mt-2 text-xs leading-relaxed text-zinc-400">
+                7 американских дорожек, современный кеглепад и автоматический учет серий.
+              </p>
+            </div>
+          </article>
+
+          <article class="keyline keyline-hover group rounded-2xl bg-card p-2 shadow-tactile">
+            <div class="relative overflow-hidden rounded-xl">
+              <span class="absolute left-3 top-3 z-10 rounded bg-obsidian/80 px-2 py-0.5 font-mono text-[10px] text-zinc-300 backdrop-blur">
+                ZONE // 02
+              </span>
+              <img
+                src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=800&q=80"
+                alt="Игровая арена"
+                class="h-52 w-full object-cover transition duration-300 group-hover:scale-105"
+              >
+            </div>
+            <div class="p-4">
+              <div class="flex items-center justify-between">
+                <h3 class="font-display text-base font-bold uppercase text-white">Игровая арена</h3>
+                <span class="font-mono text-xs text-emerald-400">Free по чеку</span>
+              </div>
+              <p class="mt-2 text-xs leading-relaxed text-zinc-400">
+                3 консоли PS4, столы для бильярда, аэрохоккей, кикер и настольный теннис.
+              </p>
+            </div>
+          </article>
+
+          <article class="keyline keyline-hover group rounded-2xl bg-card p-2 shadow-tactile">
+            <div class="relative overflow-hidden rounded-xl">
+              <span class="absolute left-3 top-3 z-10 rounded bg-obsidian/80 px-2 py-0.5 font-mono text-[10px] text-zinc-300 backdrop-blur">
+                ZONE // 03
+              </span>
+              <img
+                src="https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=800&q=80"
+                alt="Фуд-корт"
+                class="h-52 w-full object-cover transition duration-300 group-hover:scale-105"
+              >
+            </div>
+            <div class="p-4">
+              <div class="flex items-center justify-between">
+                <h3 class="font-display text-base font-bold uppercase text-white">Фуд-корт</h3>
+                <span class="font-mono text-xs text-zinc-300">от 259 ₽</span>
+              </div>
+              <p class="mt-2 text-xs leading-relaxed text-zinc-400">
+                Фирменное гриль-меню, авторская рецептура роллов и 22 посадочных места.
+              </p>
+            </div>
+          </article>
+
+          <article class="keyline keyline-hover group rounded-2xl bg-card p-2 shadow-tactile">
+            <div class="relative overflow-hidden rounded-xl">
+              <span class="absolute left-3 top-3 z-10 rounded bg-obsidian/80 px-2 py-0.5 font-mono text-[10px] text-zinc-300 backdrop-blur">
+                ZONE // 04
+              </span>
+              <img
+                src="https://images.unsplash.com/photo-1603905179139-db12ab535ca0?auto=format&fit=crop&w=800&q=80"
+                alt="Лаунж комната"
+                class="h-52 w-full object-cover transition duration-300 group-hover:scale-105"
+              >
+            </div>
+            <div class="p-4">
+              <div class="flex items-center justify-between">
+                <h3 class="font-display text-base font-bold uppercase text-white">Lounge Room</h3>
+                <span class="font-mono text-xs text-zinc-400">Age 18+</span>
+              </div>
+              <p class="mt-2 text-xs leading-relaxed text-zinc-400">
+                Приватные зоны с мягкими диванами, премиальная чайная карта и коллекция игр.
+              </p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bowling Terminal / Booking -->
+    <section id="bowling" class="border-y border-white/[0.08] bg-carbon/40 py-20 sm:py-28">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
+          <div>
+            <span class="font-mono text-xs font-semibold uppercase tracking-wider text-amber-400">[02 // РЕЗЕРВ]</span>
+            <h2 class="mt-2 font-display text-2xl font-black uppercase tracking-tight text-white sm:text-4xl">
+              Бронь дорожек
+            </h2>
+            <p class="mt-4 text-sm leading-relaxed text-zinc-400">
+              Выберите дорожку и слот времени. Онлайн-предоплата 30% бронирует час за вами, оставшаяся часть вносится на стойке ресепшн.
+            </p>
+
+            <div class="mt-8 space-y-2.5 font-mono text-xs">
+              <div class="flex items-center justify-between rounded-xl border border-white/[0.06] bg-card p-4">
+                <span class="text-zinc-400">Будни // Пн–Пт</span>
+                <span class="font-bold text-white">750 ₽ / ЧАС</span>
+              </div>
+              <div class="flex items-center justify-between rounded-xl border border-white/[0.06] bg-card p-4">
+                <span class="text-zinc-400">Выходные // Сб–Вс</span>
+                <span class="font-bold text-amber-400">1 200 ₽ / ЧАС</span>
+              </div>
+              <div class="flex items-center justify-between rounded-xl border border-white/[0.06] bg-card p-4">
+                <span class="text-zinc-400">Депозит</span>
+                <span class="font-bold text-emerald-400">30% ОНЛАЙН</span>
+              </div>
+            </div>
+
+            <div class="mt-6 flex items-start gap-3 rounded-xl border border-white/[0.06] bg-card/60 p-4 text-xs leading-relaxed text-zinc-400">
+              <i data-lucide="shield-check" class="mt-0.5 h-4 w-4 shrink-0 text-amber-400"></i>
+              <span>Чек из зоны фуд-корта активирует безлимитный доступ ко всем консолям PS4 и столам бильярда.</span>
+            </div>
+          </div>
+
+          <!-- Interactive Booking Console -->
+          <div
+            class="keyline rounded-2xl bg-card p-6 shadow-tactile sm:p-8"
+            x-data="bowlingBooking"
+          >
+            <div class="mb-8 flex items-center justify-between border-b border-white/[0.08] pb-5">
+              <div>
+                <span class="font-mono text-xs uppercase tracking-wider text-zinc-500">ЭТАП // 0<span x-text="step"></span> ИЗ 03</span>
+                <h3 class="mt-1 font-display text-lg font-bold uppercase text-white" x-text="stepTitle"></h3>
+              </div>
+              <div class="flex gap-1.5">
+                <template x-for="item in 3" :key="item">
+                  <div
+                    class="h-1.5 w-8 rounded-full transition-colors"
+                    :class="item <= step ? 'bg-amber-400' : 'bg-zinc-800'"
+                  ></div>
+                </template>
+              </div>
+            </div>
+
+            <!-- Step 1 -->
+            <div x-show="step === 1" class="space-y-6">
+              <div>
+                <label class="mb-3 block font-mono text-xs uppercase tracking-wider text-zinc-400">Выберите дорожку</label>
+                <div class="grid grid-cols-2 gap-2.5 sm:grid-cols-4">
+                  <template x-for="lane in lanes" :key="lane">
+                    <button
+                      type="button"
+                      class="rounded-xl border p-3.5 text-left transition shadow-button"
+                      :class="selectedLane === lane ? 'border-amber-400 bg-amber-400 text-black' : 'border-white/[0.08] bg-carbon text-white hover:border-white/20'"
+                      @click="selectedLane = lane"
+                    >
+                      <div class="font-display text-lg font-extrabold" x-text="`№ ${lane}`"></div>
+                      <div class="font-mono text-[10px] uppercase" :class="selectedLane === lane ? 'text-black font-bold' : 'text-zinc-500'">LANE SPEC</div>
+                    </button>
+                  </template>
+                </div>
+              </div>
+
+              <div>
+                <label class="mb-3 block font-mono text-xs uppercase tracking-wider text-zinc-400">Дата бронирования</label>
+                <input
+                  type="date"
+                  x-model="date"
+                  class="w-full rounded-xl border border-white/[0.08] bg-carbon px-4 py-3 font-mono text-sm text-white outline-none focus:border-amber-400"
+                >
+              </div>
+            </div>
+
+            <!-- Step 2 -->
+            <div x-show="step === 2" class="space-y-6">
+              <div>
+                <label class="mb-3 block font-mono text-xs uppercase tracking-wider text-zinc-400">Слот времени</label>
+                <div class="grid grid-cols-3 gap-2.5 sm:grid-cols-4">
+                  <template x-for="time in times" :key="time">
+                    <button
+                      type="button"
+                      class="rounded-xl border px-3 py-3 font-mono text-sm font-semibold transition shadow-button"
+                      :class="selectedTime === time ? 'border-amber-400 bg-amber-400 text-black' : 'border-white/[0.08] bg-carbon text-white hover:border-white/20'"
+                      @click="selectedTime = time"
+                      x-text="time"
+                    ></button>
+                  </template>
+                </div>
+              </div>
+
+              <div class="rounded-xl border border-white/[0.06] bg-carbon p-4 font-mono text-xs space-y-2">
+                <div class="flex justify-between text-zinc-400">
+                  <span>Объект:</span>
+                  <span class="font-bold text-white" x-text="selectedLane ? `Дорожка №${selectedLane}` : 'Не выбрана'"></span>
+                </div>
+                <div class="flex justify-between text-zinc-400">
+                  <span>Расчетный тариф:</span>
+                  <span class="font-bold text-amber-400" x-text="isWeekend ? 'Выходной (1 200 ₽/ч)' : 'Будний (750 ₽/ч)'"></span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 3 -->
+            <div x-show="step === 3" class="space-y-4">
+              <div class="grid gap-3 sm:grid-cols-2">
+                <div>
+                  <label class="mb-2 block font-mono text-xs text-zinc-400">Ваше имя</label>
+                  <input
+                    type="text"
+                    x-model="name"
+                    placeholder="Александр"
+                    class="w-full rounded-xl border border-white/[0.08] bg-carbon px-4 py-3 text-sm text-white outline-none focus:border-amber-400"
+                  >
+                </div>
+                <div>
+                  <label class="mb-2 block font-mono text-xs text-zinc-400">Контактный телефон</label>
+                  <input
+                    type="tel"
+                    x-model="phone"
+                    placeholder="+7 (___) ___-__-__"
+                    class="w-full rounded-xl border border-white/[0.08] bg-carbon px-4 py-3 text-sm text-white outline-none focus:border-amber-400"
+                  >
+                </div>
+              </div>
+
+              <div>
+                <label class="mb-2 block font-mono text-xs text-zinc-400">Число гостей</label>
+                <select
+                  x-model="players"
+                  class="w-full rounded-xl border border-white/[0.08] bg-carbon px-4 py-3 font-mono text-sm text-white outline-none focus:border-amber-400"
+                >
+                  <option value="2">2 игрока</option>
+                  <option value="4">4 игрока</option>
+                  <option value="6">6 игроков</option>
+                  <option value="8">8 игроков</option>
+                </select>
+              </div>
+
+              <div class="rounded-xl border border-white/[0.08] bg-carbon p-4 font-mono">
+                <div class="flex items-end justify-between">
+                  <div>
+                    <div class="text-[11px] uppercase tracking-wider text-zinc-500">Предоплата 30%</div>
+                    <div class="mt-1 font-display text-2xl font-black text-amber-400" x-text="formatPrice(prepayment)"></div>
+                  </div>
+                  <div class="text-right text-xs text-zinc-400">
+                    <div>Полный чек: <span class="text-white" x-text="formatPrice(total)"></span></div>
+                    <div>Остаток в клубе: <span class="text-white" x-text="formatPrice(total - prepayment)"></span></div>
+                  </div>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                class="w-full rounded-xl bg-white py-4 font-display text-xs font-black uppercase tracking-wider text-black shadow-button transition hover:bg-amber-400 active:scale-[0.99]"
+                @click="completeBooking"
+              >
+                Подтвердить и перейти к оплате
+              </button>
+            </div>
+
+            <!-- Terminal Navigation -->
+            <div class="mt-8 flex items-center justify-between border-t border-white/[0.08] pt-5">
+              <button
+                type="button"
+                class="rounded-lg border border-white/10 px-4 py-2.5 font-mono text-xs font-semibold text-zinc-400 transition hover:text-white disabled:opacity-20"
+                :disabled="step === 1"
+                @click="previousStep"
+              >
+                Назад
+              </button>
+
+              <button
+                x-show="step < 3"
+                type="button"
+                class="rounded-lg bg-zinc-100 px-5 py-2.5 font-display text-xs font-bold uppercase tracking-wider text-black transition hover:bg-amber-400 disabled:cursor-not-allowed disabled:opacity-20"
+                :disabled="!canContinue"
+                @click="nextStep"
+              >
+                Продолжить
+              </button>
+            </div>
+
+            <div x-show="submitted" x-cloak class="mt-6 rounded-xl border border-emerald-500/30 bg-emerald-950/20 p-4 text-center font-mono">
+              <div class="font-bold text-emerald-400">БРОНЬ ПОДТВЕРЖДЕНА</div>
+              <p class="mt-1 text-xs text-zinc-400">
+                Электронный чек и спецификация брони направлены администраторам.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Food Court -->
+    <section id="food" class="py-20 sm:py-28">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="grid items-center gap-12 lg:grid-cols-2">
+          <div>
+            <span class="font-mono text-xs font-semibold uppercase tracking-wider text-amber-400">[03 // МЕНЮ]</span>
+            <h2 class="mt-2 font-display text-2xl font-black uppercase tracking-tight text-white sm:text-4xl">
+              Гастрономия районов
+            </h2>
+            <p class="mt-4 text-sm leading-relaxed text-zinc-400">
+              Авторские рецепты гриль-роллов и шаурмы, созданные по мотивам знаковых кварталов города Волжского.
+            </p>
+
+            <div class="mt-8 divide-y divide-white/[0.08] border-y border-white/[0.08]">
+              <div class="flex items-center justify-between py-4">
+                <div>
+                  <h4 class="font-display text-sm font-bold uppercase text-white">«Волжанка»</h4>
+                  <p class="mt-0.5 text-xs text-zinc-400">Тигровые креветки, хрустящий айсберг, авторский цитрусовый соус</p>
+                </div>
+                <span class="font-mono text-sm font-bold text-amber-400">319 ₽</span>
+              </div>
+
+              <div class="flex items-center justify-between py-4">
+                <div>
+                  <h4 class="font-display text-sm font-bold uppercase text-white">«Квартальская»</h4>
+                  <p class="mt-0.5 text-xs text-zinc-400">Курица гриль, томаты, свежий огурец, белый чесночный крем</p>
+                </div>
+                <span class="font-mono text-sm font-bold text-amber-400">259 ₽</span>
+              </div>
+
+              <div class="flex items-center justify-between py-4">
+                <div>
+                  <h4 class="font-display text-sm font-bold uppercase text-white">«Рабочая»</h4>
+                  <p class="mt-0.5 text-xs text-zinc-400">Двойной мясной фарш, маринованный лук, зелень и барбекю-заправка</p>
+                </div>
+                <span class="font-mono text-sm font-bold text-amber-400">289 ₽</span>
+              </div>
+
+              <div class="flex items-center justify-between py-4">
+                <div>
+                  <h4 class="font-display text-sm font-bold uppercase text-white">«Суслик»</h4>
+                  <p class="mt-0.5 text-xs text-zinc-400">Острый халапеньо, перечный соус, куриное филе и копченый сыр</p>
+                </div>
+                <span class="font-mono text-sm font-bold text-amber-400">289 ₽</span>
+              </div>
+            </div>
+
+            <div class="mt-6 flex items-center gap-3 rounded-xl border border-white/[0.06] bg-card p-4 font-mono text-xs text-zinc-400">
+              <i data-lucide="receipt" class="h-4 w-4 shrink-0 text-amber-400"></i>
+              <span>Чек кухни открывает неограниченный доступ к консолям и игровым столам на весь вечер.</span>
+            </div>
+          </div>
+
+          <div class="keyline overflow-hidden rounded-2xl bg-card shadow-tactile">
+            <img
+              src="https://images.unsplash.com/photo-1561651823-34feb02250e4?auto=format&fit=crop&w=1100&q=80"
+              alt="Фуд-корт BRO BAZA"
+              class="h-[480px] w-full object-cover"
+            >
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Free Game Zone -->
+    <section id="game-zone" class="border-t border-white/[0.08] bg-carbon/30 py-20 sm:py-28">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="max-w-2xl">
+          <span class="font-mono text-xs font-semibold uppercase tracking-wider text-amber-400">[04 // FREE ZONE]</span>
+          <h2 class="mt-2 font-display text-2xl font-black uppercase tracking-tight text-white sm:text-4xl">
+            Игровой арсенал
+          </h2>
+          <p class="mt-4 text-sm leading-relaxed text-zinc-400">
+            Оборудование входит в стоимость чека фуд-корта. Никаких поминутных оплат.
+          </p>
+        </div>
+
+        <div class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+          <div class="keyline rounded-xl bg-card p-5 shadow-tactile">
+            <i data-lucide="gamepad-2" class="h-5 w-5 text-amber-400"></i>
+            <h3 class="mt-4 font-display text-sm font-bold uppercase text-white">3 × PS4 PRO</h3>
+            <p class="mt-1 font-mono text-xs text-zinc-400">Каталог 700+ игр</p>
+          </div>
+
+          <div class="keyline rounded-xl bg-card p-5 shadow-tactile">
+            <i data-lucide="circle-dot" class="h-5 w-5 text-amber-400"></i>
+            <h3 class="mt-4 font-display text-sm font-bold uppercase text-white">Бильярд</h3>
+            <p class="mt-1 font-mono text-xs text-zinc-400">Русский & Американский</p>
+          </div>
+
+          <div class="keyline rounded-xl bg-card p-5 shadow-tactile">
+            <i data-lucide="crosshair" class="h-5 w-5 text-amber-400"></i>
+            <h3 class="mt-4 font-display text-sm font-bold uppercase text-white">Аэрохоккей</h3>
+            <p class="mt-1 font-mono text-xs text-zinc-400">Динамичные матчи</p>
+          </div>
+
+          <div class="keyline rounded-xl bg-card p-5 shadow-tactile">
+            <i data-lucide="table-properties" class="h-5 w-5 text-amber-400"></i>
+            <h3 class="mt-4 font-display text-sm font-bold uppercase text-white">Пинг-понг</h3>
+            <p class="mt-1 font-mono text-xs text-zinc-400">Турнирные столы</p>
+          </div>
+
+          <div class="keyline rounded-xl bg-card p-5 shadow-tactile">
+            <i data-lucide="trophy" class="h-5 w-5 text-amber-400"></i>
+            <h3 class="mt-4 font-display text-sm font-bold uppercase text-white">Кикер</h3>
+            <p class="mt-1 font-mono text-xs text-zinc-400">Настольный футбол</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quizzes -->
+    <section id="quizzes" class="border-t border-white/[0.08] py-20 sm:py-28">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col justify-between gap-4 md:flex-row md:items-end">
+          <div>
+            <span class="font-mono text-xs font-semibold uppercase tracking-wider text-amber-400">[05 // КВИЗЫ]</span>
+            <h2 class="mt-2 font-display text-2xl font-black uppercase tracking-tight text-white sm:text-4xl">
+              Интеллектуальный клуб
+            </h2>
+          </div>
+          <button
+            type="button"
+            class="rounded-lg bg-white px-5 py-3 font-display text-xs font-bold uppercase tracking-wider text-black shadow-button transition hover:bg-amber-400"
+            @click="showQuizModal = true"
+          >
+            Зарегистрировать команду
+          </button>
+        </div>
+
+        <div class="mt-12 grid gap-6 md:grid-cols-3">
+          <div class="keyline rounded-2xl bg-card p-6 shadow-tactile">
+            <div class="flex items-center justify-between font-mono text-xs text-zinc-400">
+              <span class="rounded bg-obsidian px-2.5 py-1 text-white border border-white/10">Пятница</span>
+              <span>19:00</span>
+            </div>
+            <h3 class="mt-5 font-display text-lg font-bold uppercase text-white">Кино & Саундтреки</h3>
+            <p class="mt-2 text-xs leading-relaxed text-zinc-400">
+              Кадры, цитаты, композиторы и пасхалки блокбастеров. Состав команд: 4–8 человек.
+            </p>
+          </div>
+
+          <div class="keyline rounded-2xl bg-card p-6 shadow-tactile">
+            <div class="flex items-center justify-between font-mono text-xs text-zinc-400">
+              <span class="rounded bg-obsidian px-2.5 py-1 text-white border border-white/10">Суббота</span>
+              <span>18:00</span>
+            </div>
+            <h3 class="mt-5 font-display text-lg font-bold uppercase text-white">Спорт & Логика</h3>
+            <p class="mt-2 text-xs leading-relaxed text-zinc-400">
+              Громкие триумфы, исторические факты и нестандартные вопросы на сообразительность.
+            </p>
+          </div>
+
+          <div class="keyline rounded-2xl bg-card p-6 shadow-tactile">
+            <div class="flex items-center justify-between font-mono text-xs text-zinc-400">
+              <span class="rounded bg-obsidian px-2.5 py-1 text-white border border-white/10">Custom</span>
+              <span>По запросу</span>
+            </div>
+            <h3 class="mt-5 font-display text-lg font-bold uppercase text-white">Корпоративный кубок</h3>
+            <p class="mt-2 text-xs leading-relaxed text-zinc-400">
+              Персональный квиз под вашу компанию, день рождения или частное торжество.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contacts / Map -->
+    <section id="contacts" class="border-t border-white/[0.08] bg-carbon/40 py-20 sm:py-28">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="grid gap-12 lg:grid-cols-[1fr_1.1fr]">
+          <div>
+            <span class="font-mono text-xs font-semibold uppercase tracking-wider text-amber-400">[06 // КОНТАКТЫ]</span>
+            <h2 class="mt-2 font-display text-2xl font-black uppercase tracking-tight text-white sm:text-4xl">
+              Локация и визит
+            </h2>
+            <p class="mt-4 text-sm leading-relaxed text-zinc-400">
+              Мы открыты без выходных. Рекомендуем резервировать дорожки заранее на вечернее время пятницы и субботы.
+            </p>
+
+            <div class="mt-8 space-y-3 font-mono text-xs">
+              <div class="rounded-xl border border-white/[0.08] bg-card p-4">
+                <div class="text-zinc-500 uppercase">Адрес клуба</div>
+                <div class="mt-1 font-sans text-sm font-bold text-white">г. Волжский, ул. Ленина, 51А</div>
+              </div>
+
+              <div class="rounded-xl border border-white/[0.08] bg-card p-4">
+                <div class="text-zinc-500 uppercase">График</div>
+                <div class="mt-1 font-sans text-sm font-bold text-white">Ежедневно: 11:00 – 18:00</div>
+              </div>
+
+              <div class="rounded-xl border border-white/[0.08] bg-card p-4">
+                <div class="text-zinc-500 uppercase">Связь</div>
+                <a href="tel:+79275215167" class="mt-1 block font-sans text-sm font-bold text-white hover:text-amber-400">8 (927) 521-51-67</a>
+              </div>
+            </div>
+
+            <div class="mt-6 flex gap-3 font-mono text-xs">
+              <a href="https://wa.me/79275215167" class="rounded-lg border border-white/10 bg-card px-4 py-2.5 font-bold text-zinc-300 hover:border-white/20 hover:text-white shadow-tactile">
+                WhatsApp
+              </a>
+              <a href="#" class="rounded-lg border border-white/10 bg-card px-4 py-2.5 font-bold text-zinc-300 hover:border-white/20 hover:text-white shadow-tactile">
+                Telegram
+              </a>
+            </div>
+          </div>
+
+          <div class="keyline overflow-hidden rounded-2xl bg-card shadow-tactile">
+            <iframe
+              title="BRO BAZA карта"
+              src="https://yandex.ru/map-widget/v1/?text=%D0%92%D0%BE%D0%BB%D0%B6%D1%81%D0%BA%D0%B8%D0%B9%2C%20%D1%83%D0%BB%D0%B8%D1%86%D0%B0%20%D0%9B%D0%B5%D0%BD%D0%B8%D0%BD%D0%B0%2C%2051%D0%9A&z=17"
+              class="h-[420px] w-full border-0 grayscale-[60%] contrast-[1.1]"
+              loading="lazy"
+              allowfullscreen
+            ></iframe>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-white/[0.08] py-8 font-mono text-xs text-zinc-500">
+    <div class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 sm:flex-row sm:px-6 lg:px-8">
+      <div>© <span id="currentYear"></span> BRO BAZA. ALL RIGHTS RESERVED.</div>
+      <div class="flex gap-6">
+        <a href="#" class="hover:text-zinc-300">Политика конфиденциальности</a>
+        <a href="#" class="hover:text-zinc-300">Оферта</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Quick Booking Modal -->
+  <div
+    x-data="modalBooking"
+    x-show="open"
+    x-cloak
+    x-transition.opacity
+    @open-booking.window="open = true; reset()"
+    @keydown.escape.window="open = false"
+    class="fixed inset-0 z-50 grid place-items-center overflow-y-auto bg-black/80 p-4 backdrop-blur-md"
+    role="dialog"
+    aria-modal="true"
+  >
+    <div
+      class="keyline relative w-full max-w-md rounded-2xl bg-card p-6 shadow-2xl"
+      @click.outside="open = false"
+    >
+      <button
+        type="button"
+        class="absolute right-4 top-4 text-zinc-400 hover:text-white"
+        @click="open = false"
+        aria-label="Закрыть"
+      >
+        <i data-lucide="x" class="h-4 w-4"></i>
+      </button>
+
+      <span class="font-mono text-xs text-amber-400">[QUICK RESERVE]</span>
+      <h3 class="mt-1 font-display text-lg font-bold uppercase text-white">Бронь дорожки</h3>
+
+      <div class="mt-6 space-y-3.5">
+        <div>
+          <label class="mb-1 block font-mono text-xs text-zinc-400">Имя</label>
+          <input
+            x-model="name"
+            type="text"
+            placeholder="Ваше имя"
+            class="w-full rounded-xl border border-white/[0.08] bg-carbon px-4 py-2.5 text-sm text-white outline-none focus:border-amber-400"
+          >
+        </div>
+
+        <div>
+          <label class="mb-1 block font-mono text-xs text-zinc-400">Телефон</label>
+          <input
+            x-model="phone"
+            type="tel"
+            placeholder="+7 (___) ___-__-__"
+            class="w-full rounded-xl border border-white/[0.08] bg-carbon px-4 py-2.5 text-sm text-white outline-none focus:border-amber-400"
+          >
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="mb-1 block font-mono text-xs text-zinc-400">Дорожка</label>
+            <select
+              x-model="lane"
+              class="w-full rounded-xl border border-white/[0.08] bg-carbon px-3 py-2.5 font-mono text-sm text-white outline-none focus:border-amber-400"
+            >
+              <option value="">Номер</option>
+              <template x-for="item in 7" :key="item">
+                <option :value="item" x-text="`№ ${item}`"></option>
+              </template>
+            </select>
+          </div>
+
+          <div>
+            <label class="mb-1 block font-mono text-xs text-zinc-400">Время</label>
+            <select
+              x-model="time"
+              class="w-full rounded-xl border border-white/[0.08] bg-carbon px-3 py-2.5 font-mono text-sm text-white outline-none focus:border-amber-400"
+            >
+              <option value="">Время</option>
+              <template x-for="item in times" :key="item">
+                <option :value="item" x-text="item"></option>
+              </template>
+            </select>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          class="mt-2 w-full rounded-xl bg-white py-3 font-display text-xs font-bold uppercase tracking-wider text-black shadow-button hover:bg-amber-400"
+          @click="submit"
+        >
+          Зарезервировать
+        </button>
+
+        <div x-show="success" x-cloak class="mt-3 rounded-lg border border-emerald-500/30 bg-emerald-950/20 p-3 text-center font-mono text-xs text-emerald-400">
+          Заявка успешно зафиксирована!
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quiz Modal -->
+  <div
+    x-data="{ open: false, sent: false, name: '', phone: '', team: '' }"
+    x-show="open"
+    x-cloak
+    x-transition.opacity
+    @keydown.escape.window="open = false"
+    class="fixed inset-0 z-50 grid place-items-center bg-black/80 p-4 backdrop-blur-md"
+    role="dialog"
+    aria-modal="true"
+  >
+    <div
+      class="keyline relative w-full max-w-md rounded-2xl bg-card p-6 shadow-2xl"
+      @click.outside="open = false"
+    >
+      <button type="button" class="absolute right-4 top-4 text-zinc-400 hover:text-white" @click="open = false" aria-label="Закрыть">
+        <i data-lucide="x" class="h-4 w-4"></i>
+      </button>
+
+      <div x-show="!sent">
+        <span class="font-mono text-xs text-amber-400">[REGISTRATION]</span>
+        <h3 class="mt-1 font-display text-lg font-bold uppercase text-white">Команда на квиз</h3>
+
+        <div class="mt-5 space-y-3">
+          <input x-model="name" type="text" placeholder="Имя капитана" class="w-full rounded-xl border border-white/[0.08] bg-carbon px-4 py-2.5 text-sm text-white outline-none focus:border-amber-400">
+          <input x-model="phone" type="tel" placeholder="Телефон" class="w-full rounded-xl border border-white/[0.08] bg-carbon px-4 py-2.5 text-sm text-white outline-none focus:border-amber-400">
+          <input x-model="team" type="text" placeholder="Название команды" class="w-full rounded-xl border border-white/[0.08] bg-carbon px-4 py-2.5 text-sm text-white outline-none focus:border-amber-400">
+
+          <button
+            type="button"
+            class="w-full rounded-xl bg-white py-3 font-display text-xs font-bold uppercase tracking-wider text-black shadow-button hover:bg-amber-400"
+            @click="sent = true"
+          >
+            Зарегистрировать
+          </button>
+        </div>
+      </div>
+
+      <div x-show="sent" x-cloak class="py-6 text-center font-mono">
+        <div class="text-sm font-bold text-white uppercase">Команда принята!</div>
+        <p class="mt-2 text-xs text-zinc-400">Мы пришлем регламент турнира в SMS.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("alpine:init", () => {
+      Alpine.data("bowlingBooking", () => ({
+        step: 1,
+        selectedLane: null,
+        selectedTime: "",
+        date: "",
+        name: "",
+        phone: "",
+        players: "4",
+        submitted: false,
+        lanes: [1, 2, 3, 4, 5, 6, 7],
+        times: ["11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00"],
+
+        get stepTitle() {
+          return ["Выбор дорожки", "Выбор времени", "Данные гостя"][this.step - 1];
+        },
+
+        get isWeekend() {
+          if (!this.date) return false;
+          const day = new Date(`${this.date}T12:00:00`).getDay();
+          return day === 0 || day === 6;
+        },
+
+        get total() {
+          return this.isWeekend ? 1200 : 750;
+        },
+
+        get prepayment() {
+          return Math.round(this.total * 0.3);
+        },
+
+        get canContinue() {
+          if (this.step === 1) return Boolean(this.selectedLane && this.date);
+          if (this.step === 2) return Boolean(this.selectedTime);
+          return true;
+        },
+
+        nextStep() {
+          if (this.canContinue && this.step < 3) this.step++;
+        },
+
+        previousStep() {
+          if (this.step > 1) this.step--;
+        },
+
+        formatPrice(value) {
+          return new Intl.NumberFormat("ru-RU").format(value) + " ₽";
+        },
+
+        completeBooking() {
+          if (!this.name.trim() || this.phone.replace(/\D/g, "").length < 11) return;
+          this.submitted = true;
+        }
+      }));
+
+      Alpine.data("modalBooking", () => ({
+        open: false,
+        success: false,
+        name: "",
+        phone: "",
+        lane: "",
+        time: "",
+        times: ["11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00"],
+
+        reset() {
+          this.success = false;
+        },
+
+        submit() {
+          if (!this.name || !this.phone || !this.lane || !this.time) return;
+          this.success = true;
+        }
+      }));
+    });
+
+    document.addEventListener("DOMContentLoaded", () => {
+      if (window.lucide) {
+        window.lucide.createIcons();
+      }
+      const year = document.getElementById("currentYear");
+      if (year) year.textContent = new Date().getFullYear();
+    });
+  </script>
+</body>
+</html>
+```
